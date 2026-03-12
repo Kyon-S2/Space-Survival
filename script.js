@@ -309,6 +309,16 @@ window.addEventListener("touchstart", () => {
     }
 }, { passive: false });
 
+// Bloqueia o scroll e o gesto de "puxar para atualizar"
+window.addEventListener('touchmove', function (e) {
+    if (e.cancelable) e.preventDefault();
+}, { passive: false });
+
+// Bloqueia o menu de contexto (botão direito/toque longo) para não atrapalhar o jogo
+window.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+}, false);
+
 // Chame a função antes do desenhar();
 setupJoystick();
 

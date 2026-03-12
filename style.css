@@ -62,3 +62,20 @@ canvas {
                 pointer-events: auto;
         }
 }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Bloqueia a rolagem */
+    position: fixed;  /* Impede o "puxão" da página no iOS/Android */
+    touch-action: none; /* Diz ao navegador para não tratar toques como gestos de página */
+}
+
+canvas {
+    display: block;
+    touch-action: none; /* Garante que o toque no canvas não role a tela */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
