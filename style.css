@@ -1,67 +1,29 @@
+body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #222; }
+        canvas { border: 2px solid #fff; background: #000; }
+
+
+/* Garanta que o corpo da página não role no celular */
 body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background: #222;
+    margin: 0;
+    overflow: hidden;
+    touch-action: none;
 }
-
-canvas {
-        border: 2px solid #fff;
-        background: #000;
-}
-
 
 #ui-mobile {
-        display: none;
-        position: fixed;
-        width: 100%;
-        bottom: 30px;
-        left: 0;
-        justify-content: space-between;
-        padding: 0 20px;
-        pointer-events: none;
-        /* Deixa o toque passar para os botões */
+    display: none; 
+    position: fixed;
+    width: 100%;
+    bottom: 30px;
+    left: 0;
+    z-index: 999; /* ISSO COLOCA OS BOTÕES NA FRENTE DE TUDO */
+    pointer-events: auto; /* Garante que o toque seja registrado */
 }
 
 @media (max-width: 768px) {
-        #ui-mobile {
-                display: flex;
-                pointer-events: auto;
-        }
+    #ui-mobile { display: flex; justify-content: space-between; padding: 0 20px; }
 }
 
-#direcionais {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-}
-
-.fileira {
-        display: flex;
-        gap: 40px;
-}
-
-.ctrl {
-        width: 70px;
-        height: 70px;
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid #fff;
-        border-radius: 50%;
-        color: white;
-        font-size: 25px;
-        touch-action: manipulation;
-        /* Evita zoom do navegador */
-}
-
-#btn-start {
-        width: 120px;
-        height: 120px;
-        background: rgba(0, 255, 255, 0.3);
-        border: 3px solid cyan;
-        border-radius: 50%;
-        color: white;
-        font-weight: bold;
-        align-self: flex-end;
+.ctrl, #btn-start {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent; /* Remove o quadrado azul ao tocar */
 }

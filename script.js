@@ -3,17 +3,17 @@ const ctx = canvas.getContext("2d");
 
 // --- 1. ASSETS ---
 const somMoeda = new Audio('moeda.mp3?v=' + Date.now());
-const somMusica = new Audio('musica.mp3'); 
+const somMusica = new Audio('musica.mp3');
 somMusica.loop = true; // Música em loop
 somMusica.volume = 0.4;
 
 let audioLiberado = false;
 
 const imgJogador = new Image(); imgJogador.src = 'jogador.png';
-const imgMoeda = new Image();   imgMoeda.src = 'moeda.png';
-const imgInimigo = new Image(); imgInimigo.src = 'inimigo.png'; 
-const imgInimigo2 = new Image(); imgInimigo2.src = 'inimigo2.png'; 
-const imgFundo = new Image();   imgFundo.src = 'espaco.png';
+const imgMoeda = new Image(); imgMoeda.src = 'moeda.png';
+const imgInimigo = new Image(); imgInimigo.src = 'inimigo.png';
+const imgInimigo2 = new Image(); imgInimigo2.src = 'inimigo2.png';
+const imgFundo = new Image(); imgFundo.src = 'espaco.png';
 const imgCristal = new Image(); imgCristal.src = 'cristal.png';
 const imgCoracao = new Image(); imgCoracao.src = 'coracao.png'; // NOVA
 
@@ -28,7 +28,7 @@ let estadoJogo = "menu";
 let x, y, itemX, itemY;
 let especialX = -100, especialY = -100;
 let especialAtivo = false, powerUpAtivo = false, tempoPowerUp = 0;
-let inimigos = []; 
+let inimigos = [];
 let particulas = []; // SISTEMA DE PARTÍCULAS
 let pontos, tempoRestante, contagemRegressiva, msgDificuldade = "";
 let vidas = 3; // SISTEMA DE VIDAS
@@ -54,7 +54,7 @@ function adicionarInimigo(tipo = "comum") {
     inimigos.push({
         x: Math.random() * (canvas.width - inimigoTamanho),
         y: Math.random() * (canvas.height - inimigoTamanho),
-        velX: (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 2), 
+        velX: (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 2),
         velY: (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 2),
         tipo: tipo,
         rastro: []
@@ -66,7 +66,7 @@ function iniciarJogo() {
     x = 175; y = 175; pontos = 0; tempoRestante = 90; vidas = 3;
     estadoJogo = "jogando"; msgDificuldade = "";
     inimigos = []; particulas = []; especialAtivo = false; powerUpAtivo = false; tempoPowerUp = 0;
-    
+
     adicionarInimigo("comum");
     itemX = Math.random() * (canvas.width - itemTamanho);
     itemY = Math.random() * (canvas.height - itemTamanho);
@@ -117,16 +117,16 @@ function atualizar() {
     });
 
     let velAtual = powerUpAtivo ? velocidadeBaseJogador * 1.8 : velocidadeBaseJogador;
-    if (teclas["ArrowUp"]    || teclas["w"] || teclas["W"]) y -= velAtual;
-    if (teclas["ArrowDown"]  || teclas["s"] || teclas["S"]) y += velAtual;
-    if (teclas["ArrowLeft"]  || teclas["a"] || teclas["A"]) x -= velAtual;
+    if (teclas["ArrowUp"] || teclas["w"] || teclas["W"]) y -= velAtual;
+    if (teclas["ArrowDown"] || teclas["s"] || teclas["S"]) y += velAtual;
+    if (teclas["ArrowLeft"] || teclas["a"] || teclas["A"]) x -= velAtual;
     if (teclas["ArrowRight"] || teclas["d"] || teclas["D"]) x += velAtual;
 
     x = Math.max(0, Math.min(x, canvas.width - tamanho));
     y = Math.max(0, Math.min(y, canvas.height - tamanho));
 
     inimigos.forEach((ini, index) => {
-        ini.rastro.push({x: ini.x, y: ini.y});
+        ini.rastro.push({ x: ini.x, y: ini.y });
         if (ini.rastro.length > 8) ini.rastro.shift();
 
         if (ini.tipo === "perseguidor") {
@@ -142,7 +142,7 @@ function atualizar() {
         // COLISÃO COM INIMIGO
         if (!powerUpAtivo && x < ini.x + inimigoTamanho && x + tamanho > ini.x && y < ini.y + inimigoTamanho && y + tamanho > ini.y) {
             vidas--;
-            criarParticulas(x + tamanho/2, y + tamanho/2, "red");
+            criarParticulas(x + tamanho / 2, y + tamanho / 2, "red");
             // Resetar posição para não morrer instantaneamente de novo
             x = 175; y = 175;
             if (vidas <= 0) {
@@ -164,7 +164,7 @@ function atualizar() {
         }
         if (pontos % 20 === 0) Math.random() < 0.5 ? adicionarInimigo("perseguidor") : adicionarInimigo("comum");
         if (pontos > recorde) { recorde = pontos; localStorage.setItem("recordeMaximo", recorde); }
-        somMoeda.currentTime = 0; somMoeda.play().catch(() => {}); 
+        somMoeda.currentTime = 0; somMoeda.play().catch(() => { });
         itemX = Math.random() * (canvas.width - itemTamanho);
         itemY = Math.random() * (canvas.height - itemTamanho);
     }
@@ -192,7 +192,7 @@ function desenhar() {
 
     } else if (estadoJogo === "jogando") {
         atualizar();
-        
+
         // Desenhar Partículas
         particulas.forEach(p => {
             ctx.globalAlpha = p.vida;
@@ -204,7 +204,7 @@ function desenhar() {
         if (powerUpAtivo) { ctx.shadowBlur = 20; ctx.shadowColor = "cyan"; }
         ctx.drawImage(imgJogador, x, y, tamanho, tamanho);
         ctx.shadowBlur = 0;
-        
+
         ctx.drawImage(imgMoeda, itemX, itemY, itemTamanho, itemTamanho);
         if (especialAtivo) ctx.drawImage(imgCristal, especialX, especialY, itemTamanho, itemTamanho);
 
@@ -253,30 +253,36 @@ function setupMobile() {
 
     Object.keys(botoes).forEach(id => {
         const btn = document.getElementById(id);
+        if (!btn) return;
+
         const tecla = botoes[id];
 
-        const ativar = (e) => { e.preventDefault(); teclas[tecla] = true; };
-        const desativar = (e) => { e.preventDefault(); teclas[tecla] = false; };
+        // Função única para lidar com o pressionar
+        const pressionar = (e) => {
+            e.preventDefault();
+            teclas[tecla] = true;
+            if (estadoJogo !== "jogando") iniciarJogo(); // Tenta iniciar
+        };
 
-        btn.addEventListener("touchstart", ativar);
-        btn.addEventListener("touchend", desativar);
+        // Função única para lidar com o soltar
+        const soltar = (e) => {
+            e.preventDefault();
+            teclas[tecla] = false;
+        };
+
+        // Escuta tanto TOQUE quanto MOUSE (para testes)
+        btn.addEventListener("touchstart", pressionar, { passive: false });
+        btn.addEventListener("touchend", soltar, { passive: false });
+        btn.addEventListener("mousedown", pressionar);
+        btn.addEventListener("mouseup", soltar);
     });
 
-    // Botão de Start Dedicado
+    // Botão de START
     const btnStart = document.getElementById("btn-start");
-    btnStart.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        if (estadoJogo !== "jogando") {
-            // Desbloqueia áudio no mobile
-            somMoeda.play().then(() => { 
-                somMoeda.pause(); 
-                somMoeda.currentTime = 0; 
-                audioLiberado = true; 
-                iniciarJogo(); 
-            }).catch(err => console.log("Erro áudio:", err));
-        }
-    });
+    if (btnStart) {
+        btnStart.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            if (estadoJogo !== "jogando") iniciarJogo();
+        }, { passive: false });
+    }
 }
-
-// Chama a função
-setupMobile();
