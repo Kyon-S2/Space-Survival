@@ -13,35 +13,55 @@ canvas {
 }
 
 
-#controles-mobile {
+#ui-mobile {
         display: none;
-        /* Escondido por padrão no PC */
         position: fixed;
-        bottom: 20px;
-        left: 20px;
-        user-select: none;
+        width: 100%;
+        bottom: 30px;
+        left: 0;
+        justify-content: space-between;
+        padding: 0 20px;
+        pointer-events: none;
+        /* Deixa o toque passar para os botões */
 }
 
 @media (max-width: 768px) {
-        #controles-mobile {
-                display: block;
+        #ui-mobile {
+                display: flex;
+                pointer-events: auto;
         }
-
-        /* Mostra no celular */
 }
 
-.linha-meio {
+#direcionais {
         display: flex;
-        justify-content: center;
-        gap: 10px;
+        flex-direction: column;
+        align-items: center;
 }
 
-#controles-mobile button {
-        width: 60px;
-        height: 60px;
-        font-size: 24px;
-        background: rgba(255, 255, 255, 0.3);
+.fileira {
+        display: flex;
+        gap: 40px;
+}
+
+.ctrl {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid #fff;
+        border-radius: 50%;
         color: white;
-        border: 2px solid white;
-        border-radius: 10px;
+        font-size: 25px;
+        touch-action: manipulation;
+        /* Evita zoom do navegador */
+}
+
+#btn-start {
+        width: 120px;
+        height: 120px;
+        background: rgba(0, 255, 255, 0.3);
+        border: 3px solid cyan;
+        border-radius: 50%;
+        color: white;
+        font-weight: bold;
+        align-self: flex-end;
 }
