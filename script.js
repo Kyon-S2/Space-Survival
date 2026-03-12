@@ -196,7 +196,7 @@ function desenhar() {
         ctx.fillText("SPACE SURVIVAL", canvas.width / 2, canvas.height / 2 - 50);
         ctx.fillStyle = "white"; ctx.font = "18px Arial";
         ctx.fillText("WASD para mover | 3 Vidas | Cristais Acumulam", canvas.width / 2, canvas.height / 2 + 10);
-        ctx.fillText("Pressione ESPAÇO para Iniciar", canvas.width / 2, canvas.height / 2 + 60);
+        ctx.fillText("Toque ou ESPAÇO para Iniciar", canvas.width / 2, canvas.height / 2 + 60);
 
     } else if (estadoJogo === "jogando") {
         atualizar();
@@ -251,6 +251,8 @@ function desenhar() {
 
 desenhar();
 
+
+//JOYSTICK MOBILE!
 let joystickDados = { x: 0, y: 0, ativo: false };
 
 function setupJoystick() {
@@ -300,5 +302,13 @@ function setupJoystick() {
     window.addEventListener("touchend", resetarJoystick);
 }
 
+// Iniciar jogo ao tocar na tela (qualquer lugar) se estiver no Menu ou Game Over
+window.addEventListener("touchstart", () => {
+    if (estadoJogo !== "jogando") {
+        iniciarJogo();
+    }
+}, { passive: false });
+
 // Chame a função antes do desenhar();
 setupJoystick();
+

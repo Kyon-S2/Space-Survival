@@ -43,32 +43,22 @@ canvas {
         /* Suaviza a volta ao centro */
 }
 
-/* 1. ESCONDIDO POR PADRÃO (Para quem está no PC) */
 #ui-mobile {
         display: none;
         position: fixed;
         width: 100%;
-        bottom: 30px;
+        bottom: 50px;
+        /* Um pouco mais alto para não bater no fundo do celular */
         left: 0;
         z-index: 999;
         pointer-events: none;
-        /* Evita que o container bloqueie cliques no PC */
 }
 
-/* 2. APARECE APENAS EM TELAS PEQUENAS (Celulares e Tablets) */
 @media (max-width: 768px) {
         #ui-mobile {
                 display: flex;
-                /* Muda para flex apenas no celular */
-                justify-content: space-between;
-                padding: 0 40px;
+                justify-content: center;
+                /* Centraliza o joystick no mobile */
                 pointer-events: auto;
-                /* Reativa os toques */
         }
-}
-
-/* Ajuste para o botão Start não ficar em cima do Joystick */
-#btn-start {
-        align-self: flex-end;
-        /* ... seus outros estilos de cores e bordas ... */
 }
