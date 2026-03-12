@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Survival Space</title>
 
     <link rel="icon" type="image/png" href="favicon.png">
@@ -13,6 +13,15 @@
 
 <body>
     <canvas id="jogoCanvas" width="400" height="400"></canvas>
+
+    <div id="controles-mobile">
+        <button id="btn-up">▲</button>
+        <div class="linha-meio">
+            <button id="btn-left">◀</button>
+            <button id="btn-down">▼</button>
+            <button id="btn-right">▶</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
