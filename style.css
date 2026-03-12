@@ -1,81 +1,74 @@
-body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background: #222;
-}
-
-canvas {
-        border: 2px solid #fff;
-        background: #000;
-}
-
-
-#joystick-container {
-        width: 150px;
-        height: 150px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-}
-
-#joystick-base {
-        width: 120px;
-        height: 120px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        position: relative;
-}
-
-#joystick-stick {
-        width: 60px;
-        height: 60px;
-        background: rgba(0, 255, 255, 0.5);
-        border: 2px solid cyan;
-        border-radius: 50%;
-        position: absolute;
-        top: 30px;
-        left: 30px;
-        transition: transform 0.1s ease-out;
-        /* Suaviza a volta ao centro */
-}
-
-#ui-mobile {
-        display: none;
-        position: fixed;
-        width: 100%;
-        bottom: 50px;
-        /* Um pouco mais alto para não bater no fundo do celular */
-        left: 0;
-        z-index: 999;
-        pointer-events: none;
-}
-
-@media (max-width: 768px) {
-        #ui-mobile {
-                display: flex;
-                justify-content: center;
-                /* Centraliza o joystick no mobile */
-                pointer-events: auto;
-        }
-}
-
+/* Bloqueio total de rolagem e gestos do navegador */
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Bloqueia a rolagem */
-    position: fixed;  /* Impede o "puxão" da página no iOS/Android */
-    touch-action: none; /* Diz ao navegador para não tratar toques como gestos de página */
+    overflow: hidden;
+    position: fixed; /* Trava a tela no lugar */
+    background: #000;
+    font-family: Arial, sans-serif;
+    touch-action: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
+    border: 2px solid #fff;
+    background: #000;
+    max-width: 95vw;
+    max-height: 95vh;
     display: block;
-    touch-action: none; /* Garante que o toque no canvas não role a tela */
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+/* Joystick Mobile */
+#ui-mobile {
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    #ui-mobile {
+        display: flex;
+        justify-content: center;
+        pointer-events: auto;
+    }
+}
+
+#joystick-base {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 50%;
+    position: relative;
+}
+
+#joystick-stick {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 255, 255, 0.5);
+    border: 2px solid cyan;
+    border-radius: 50%;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    transition: transform 0.1s ease-out;
 }
