@@ -117,14 +117,22 @@ function atualizar() {
     });
 
     let velAtual = powerUpAtivo ? velocidadeBaseJogador * 1.8 : velocidadeBaseJogador;
+
+    // --- MOVIMENTO TECLADO ---
     if (teclas["ArrowUp"] || teclas["w"] || teclas["W"]) y -= velAtual;
     if (teclas["ArrowDown"] || teclas["s"] || teclas["S"]) y += velAtual;
     if (teclas["ArrowLeft"] || teclas["a"] || teclas["A"]) x -= velAtual;
     if (teclas["ArrowRight"] || teclas["d"] || teclas["D"]) x += velAtual;
 
+    // --- MOVIMENTO JOYSTICK (ADICIONE ESTAS DUAS LINHAS ABAIXO) ---
+    x += joystickDados.x * velAtual;
+    y += joystickDados.y * velAtual;
+
+    // Manter dentro do canvas (Bordas)
     x = Math.max(0, Math.min(x, canvas.width - tamanho));
     y = Math.max(0, Math.min(y, canvas.height - tamanho));
 
+    // Lógica de Inimigos e Colisões (Não mexer aqui para baixo)
     inimigos.forEach((ini, index) => {
         ini.rastro.push({ x: ini.x, y: ini.y });
         if (ini.rastro.length > 8) ini.rastro.shift();
@@ -132,18 +140,18 @@ function atualizar() {
         if (ini.tipo === "perseguidor") {
             let dx = x - ini.x; let dy = y - ini.y;
             let dist = Math.sqrt(dx * dx + dy * dy);
-            ini.x += (dx / dist) * 1.8; ini.y += (dy / dist) * 1.8;
+            if (dist > 0) { // Evita erro de divisão por zero
+                ini.x += (dx / dist) * 1.8; ini.y += (dy / dist) * 1.8;
+            }
         } else {
             ini.x += ini.velX; ini.y += ini.velY;
             if (ini.x <= 0 || ini.x + inimigoTamanho >= canvas.width) ini.velX *= -1;
             if (ini.y <= 0 || ini.y + inimigoTamanho >= canvas.height) ini.velY *= -1;
         }
 
-        // COLISÃO COM INIMIGO
         if (!powerUpAtivo && x < ini.x + inimigoTamanho && x + tamanho > ini.x && y < ini.y + inimigoTamanho && y + tamanho > ini.y) {
             vidas--;
             criarParticulas(x + tamanho / 2, y + tamanho / 2, "red");
-            // Resetar posição para não morrer instantaneamente de novo
             x = 175; y = 175;
             if (vidas <= 0) {
                 estadoJogo = "gameover";
@@ -243,46 +251,54 @@ function desenhar() {
 
 desenhar();
 
-function setupMobile() {
-    const botoes = {
-        "btn-up": "w",
-        "btn-down": "s",
-        "btn-left": "a",
-        "btn-right": "d"
+let joystickDados = { x: 0, y: 0, ativo: false };
+
+function setupJoystick() {
+    const base = document.getElementById("joystick-base");
+    const stick = document.getElementById("joystick-stick");
+    const centro = 60; // Metade da base (120/2)
+
+    const moverJoystick = (e) => {
+        if (!joystickDados.ativo) return;
+        e.preventDefault();
+
+        const toque = e.touches ? e.touches[0] : e;
+        const rect = base.getBoundingClientRect();
+
+        // Posição do toque relativa ao centro da base
+        let posX = toque.clientX - rect.left - centro;
+        let posY = toque.clientY - rect.top - centro;
+
+        // Limita o movimento do analógico dentro do círculo (Pitágoras)
+        const distancia = Math.sqrt(posX * posX + posY * posY);
+        const raioMax = 50;
+
+        if (distancia > raioMax) {
+            posX = (posX / distancia) * raioMax;
+            posY = (posY / distancia) * raioMax;
+        }
+
+        // Move visualmente o analógico
+        stick.style.transform = `translate(${posX}px, ${posY}px)`;
+
+        // Normaliza os dados para o jogo (-1 a 1)
+        joystickDados.x = posX / raioMax;
+        joystickDados.y = posY / raioMax;
+
+        if (estadoJogo !== "jogando") iniciarJogo();
     };
 
-    Object.keys(botoes).forEach(id => {
-        const btn = document.getElementById(id);
-        if (!btn) return;
+    const resetarJoystick = () => {
+        joystickDados.ativo = false;
+        joystickDados.x = 0;
+        joystickDados.y = 0;
+        stick.style.transform = `translate(0px, 0px)`;
+    };
 
-        const tecla = botoes[id];
-
-        // Função única para lidar com o pressionar
-        const pressionar = (e) => {
-            e.preventDefault();
-            teclas[tecla] = true;
-            if (estadoJogo !== "jogando") iniciarJogo(); // Tenta iniciar
-        };
-
-        // Função única para lidar com o soltar
-        const soltar = (e) => {
-            e.preventDefault();
-            teclas[tecla] = false;
-        };
-
-        // Escuta tanto TOQUE quanto MOUSE (para testes)
-        btn.addEventListener("touchstart", pressionar, { passive: false });
-        btn.addEventListener("touchend", soltar, { passive: false });
-        btn.addEventListener("mousedown", pressionar);
-        btn.addEventListener("mouseup", soltar);
-    });
-
-    // Botão de START
-    const btnStart = document.getElementById("btn-start");
-    if (btnStart) {
-        btnStart.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            if (estadoJogo !== "jogando") iniciarJogo();
-        }, { passive: false });
-    }
+    base.addEventListener("touchstart", (e) => { joystickDados.ativo = true; moverJoystick(e); });
+    window.addEventListener("touchmove", moverJoystick, { passive: false });
+    window.addEventListener("touchend", resetarJoystick);
 }
+
+// Chame a função antes do desenhar();
+setupJoystick();

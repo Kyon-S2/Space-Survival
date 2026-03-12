@@ -1,29 +1,74 @@
-body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #222; }
-        canvas { border: 2px solid #fff; background: #000; }
-
-
-/* Garanta que o corpo da página não role no celular */
 body {
-    margin: 0;
-    overflow: hidden;
-    touch-action: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: #222;
 }
 
+canvas {
+        border: 2px solid #fff;
+        background: #000;
+}
+
+
+#joystick-container {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+#joystick-base {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        position: relative;
+}
+
+#joystick-stick {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 255, 255, 0.5);
+        border: 2px solid cyan;
+        border-radius: 50%;
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        transition: transform 0.1s ease-out;
+        /* Suaviza a volta ao centro */
+}
+
+/* 1. ESCONDIDO POR PADRÃO (Para quem está no PC) */
 #ui-mobile {
-    display: none; 
-    position: fixed;
-    width: 100%;
-    bottom: 30px;
-    left: 0;
-    z-index: 999; /* ISSO COLOCA OS BOTÕES NA FRENTE DE TUDO */
-    pointer-events: auto; /* Garante que o toque seja registrado */
+        display: none;
+        position: fixed;
+        width: 100%;
+        bottom: 30px;
+        left: 0;
+        z-index: 999;
+        pointer-events: none;
+        /* Evita que o container bloqueie cliques no PC */
 }
 
+/* 2. APARECE APENAS EM TELAS PEQUENAS (Celulares e Tablets) */
 @media (max-width: 768px) {
-    #ui-mobile { display: flex; justify-content: space-between; padding: 0 20px; }
+        #ui-mobile {
+                display: flex;
+                /* Muda para flex apenas no celular */
+                justify-content: space-between;
+                padding: 0 40px;
+                pointer-events: auto;
+                /* Reativa os toques */
+        }
 }
 
-.ctrl, #btn-start {
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent; /* Remove o quadrado azul ao tocar */
+/* Ajuste para o botão Start não ficar em cima do Joystick */
+#btn-start {
+        align-self: flex-end;
+        /* ... seus outros estilos de cores e bordas ... */
 }
